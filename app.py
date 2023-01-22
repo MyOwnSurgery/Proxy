@@ -37,10 +37,10 @@ def replace_text(path: str):
         initial_content = requester.get_page_content(path=path)
     except exceptions.BrowserFault:
         app.logger.error(f'Something is wrong with browser specified ({core.BROWSER})')
-        raise
+        return Response("Connection refused", status=500)
     except Exception as ex:
         app.logger.error(f'Unexpected error {str(ex)}')
-        raise
+        return Response("Unexpected Error", status=500)
     # and get processed content
     replaced_content = replacer.replace_content(initial_content=initial_content)
     return render_template_string(source=replaced_content)
