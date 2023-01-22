@@ -19,6 +19,13 @@ docker run
 -e STRING_TO_REPLACE_WITH="BlackHub Games" -p 80:8080 proxy
 ```
 ### You can see all the variables in Dockerfile
+### After starting the application it will be available at localhost:80
+
+### Run tests
+```
+docker exec -it <container-id> /bin/sh
+python -m unittest discover
+```
 
 ### Time spent
 ```
@@ -30,5 +37,5 @@ Testing and debugging ~ 3 hours
 
 ### Problems
 ```
-Can`t cope with transparent images and svgs 
+Can`t cope with transparent images and svgs by using selenium
 ```
