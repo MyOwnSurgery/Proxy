@@ -5,7 +5,7 @@ from flask import render_template_string, Response
 import core
 from core import create_app, requester, replacer
 from core.utils import exceptions
-from core.utils.extensions import get_type_by_path, Types
+import core.utils.extensions as extensions
 
 app = create_app()
 
@@ -20,17 +20,17 @@ def replace_text(path: str):
     """ Replace specified string instances
         Or scrape target url for content if request is not a webpage """
     # determine types and extensions
-    request_type, extension = get_type_by_path(path=path)
+    request_type, extension = extensions.get_request_info_by_path(path=path)
 
-    app.logger.info(f'{request_type} is requested with {extension} extension')
+    app.logger.info(f'{request_type} is requested with {extension if extension else "no"} extension at {path}')
 
     # try to get content from website
     try:
-        if request_type == Types.SCRIPT or request_type == Types.CSS:
+        if request_type == extensions.Types.SCRIPT or request_type == extensions.Types.CSS:
             return render_template_string(source=requester.get_text_like_file(path=path))
-        if request_type == Types.IMAGE:
+        if request_type == extensions.Types.IMAGE:
             return Response(requester.get_image(path), mimetype=f'image/{extension}')
-        if request_type == Types.SVG:
+        if request_type == extensions.Types.SVG:
             return Response(requester.get_svg(path), mimetype=f'image/{extension}')
 
         # if webpage is requested we try to get it

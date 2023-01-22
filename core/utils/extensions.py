@@ -12,6 +12,7 @@ class Types(Enum):
     CSS = 'css'
     SVG = 'svg'
     HTML = 'html'
+    DEFAULT = 'default'
 
 
 EXTENSION_2_TYPE = {'.jpg': Types.IMAGE, '.png': Types.IMAGE, '.ico': Types.IMAGE,
@@ -20,7 +21,8 @@ EXTENSION_2_TYPE = {'.jpg': Types.IMAGE, '.png': Types.IMAGE, '.ico': Types.IMAG
                     '.svg': Types.SVG}
 
 
-def get_type_by_path(path: str) -> Tuple[Types, Union[Extension, None]]:
+def get_request_info_by_path(path: str) -> Tuple[Types, Union[Extension, None]]:
+    """ Return type of file and extension """
     split = os.path.splitext(path)
     if len(split) == 1:
         return Types.HTML, None
@@ -28,8 +30,7 @@ def get_type_by_path(path: str) -> Tuple[Types, Union[Extension, None]]:
     _, extension = split
     file_type = EXTENSION_2_TYPE.get(extension, None)
 
-    # try to process as html
     if not file_type:
-        return Types.HTML, None
+        return Types.DEFAULT, extension
 
     return file_type, extension
